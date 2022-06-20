@@ -1,0 +1,21 @@
+.transfer {
+  display: flex;
+  :global {
+    .transfer_pannel {
+      border: 1px solid #ccc;
+      list-style: none;
+      flex: 1 0 0;
+      box-sizing: border-box;
+      padding: 10px;
+      margin: 0;
+    }
+    .transfer_operation {
+      display: flex;
+      flex-direction: column;
+      width: 30px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 20px;
+    }
+  }
+}
