@@ -52,6 +52,18 @@ const Transfer: React.FC<Props> = ({ value, options, onChange }) => {
     });
   };
 
+  const handleSelectAll = (value: boolean, isRight: boolean) => {
+    setList((pre) => {
+      pre = [...pre];
+      pre.forEach((v) => {
+        if (v.selected === isRight) {
+          v.checked = value;
+        }
+      });
+      return pre;
+    });
+  };
+
   const handleChange = () => {
     onChange(list.filter((v) => v.selected).map((v) => v.id));
   };
@@ -94,6 +106,7 @@ const Transfer: React.FC<Props> = ({ value, options, onChange }) => {
         data={left}
         className="transfer_pannel transfer_left"
         onSelect={handleSelect}
+        onSelectAll={(v) => handleSelectAll(v, false)}
       />
       <div className="transfer_operation">
         <button
@@ -111,6 +124,7 @@ const Transfer: React.FC<Props> = ({ value, options, onChange }) => {
         data={right}
         className="transfer_pannel transfer_right"
         onSelect={handleSelect}
+        onSelectAll={(v) => handleSelectAll(v, true)}
       />
     </div>
   );
