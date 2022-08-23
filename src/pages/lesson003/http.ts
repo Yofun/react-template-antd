@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const http = axios.create({
   baseURL: "/",
@@ -7,13 +7,18 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => config);
 
+http.interceptors.response.use((response) => {
+  return response;
+});
+
 http.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.log("interceptors error", error);
-    return Promise.reject();
+  (res) => res,
+  (e: AxiosError) => {
+    let error: Error = e;
+    console.log("interceptors error", e);
+
+    throw error;
   }
 );
-
 
 export default http;
