@@ -1,38 +1,52 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useLocalforage } from "./use-localforage";
 
+interface User {
+  name?: string;
+  age?: string;
+}
+
 const View = () => {
-  const { data, set, remove, clear } = useLocalforage("input");
+  const {
+    data: userDraft,
+    set: setUserDraft,
+    remove: removeUserDraft,
+  } = useLocalforage<User>("username");
 
-  const [value, setValue] = useState("");
-
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      set(value);
-      setValue(value);
-    },
-    [set]
-  );
-
-  const handleRemove = useCallback(() => {
-    remove();
-  }, [remove]);
-
-  const handleClear = useCallback(() => {
-    clear();
-  }, [clear]);
+  const [user, setUser] = useState<User>(userDraft || {});
+  const onUserChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "name" | "age"
+  ) => {
+    const value = e.target.value;
+    const u = { ...user, [type]: value };
+    setUser(u);
+    setUserDraft(u);
+  };
 
   useEffect(() => {
-    setValue(data || "");
-  }, [data]);
+    setUser(userDraft || {});
+  }, [userDraft]);
 
   return (
     <div>
-      <input type="text" value={value} onChange={(e) => onChange(e)} />
-      <button onClick={() => handleRemove()}>delete</button>
-      <button onClick={() => handleClear()}>clear</button>
+      <h3>固定key: usename</h3>
+      <input
+        key={"name"}
+        type="text"
+        value={user.name || ""}
+        onChange={(e) => onUserChange(e, "name")}
+      />
+      <br />
+      <input
+        key={"age"}
+        type="text"
+        value={user.age || ""}
+        onChange={(e) => onUserChange(e, "age")}
+      />
+      <br />
+      <button onClick={() => removeUserDraft()}>delete</button>
     </div>
   );
 };

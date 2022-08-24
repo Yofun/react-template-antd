@@ -1,15 +1,23 @@
 import forage from "localforage";
 
 class Localforage {
+  private forage: typeof forage;
+
+  constructor() {
+    this.forage = forage.createInstance({
+      driver: forage.INDEXEDDB,
+    });
+  }
+
   get<T = never>(key: string): Promise<T | null>;
   get<T = never>(key: RegExp): Promise<T[] | null>;
   async get<T = never>(key: string | RegExp) {
     try {
       if (typeof key === "string") {
-        return await forage.getItem<T>(key);
+        return await this.forage.getItem<T>(key);
       } else {
         const result: T[] = [];
-        const keys = await forage.keys();
+        const keys = await this.forage.keys();
         for (let i = 0; i < keys.length; i++) {
           const k = keys[i];
           if (key.test(k)) {
@@ -26,7 +34,7 @@ class Localforage {
 
   async set<T = never>(key: string, value: T) {
     try {
-      return await forage.setItem<T>(key, value);
+      return await this.forage.setItem<T>(key, value);
     } catch (error) {
       return null;
     }
@@ -35,9 +43,9 @@ class Localforage {
   async remove(key: string | RegExp) {
     try {
       if (typeof key === "string") {
-        await forage.removeItem(key);
+        await this.forage.removeItem(key);
       } else {
-        const keys = await forage.keys();
+        const keys = await this.forage.keys();
         for (let i = 0; i < keys.length; i++) {
           const k = keys[i];
           if (key.test(k)) {
@@ -53,7 +61,7 @@ class Localforage {
 
   async clear() {
     try {
-      await forage.clear();
+      await this.forage.clear();
       return true;
     } catch (error) {
       return false;
@@ -62,7 +70,7 @@ class Localforage {
 
   async has(key: string | RegExp) {
     try {
-      const keys = await forage.keys();
+      const keys = await this.forage.keys();
       for (let i = 0; i < keys.length; i++) {
         const k = keys[i];
         if (typeof key === "string") {
