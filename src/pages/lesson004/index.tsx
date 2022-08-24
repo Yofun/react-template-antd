@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useLocalforage } from "./use-localforage";
 
 const View = () => {
-  const { data, set, remove, clear } = useLocalforage<string>("input");
+  const { data, set, remove, clear } = useLocalforage("input");
 
   const [value, setValue] = useState("");
 

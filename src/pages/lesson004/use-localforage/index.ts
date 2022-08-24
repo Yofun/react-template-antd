@@ -1,99 +1,92 @@
 import { useCallback, useState, useEffect } from "react";
-import localforage from "localforage";
+// import localforage from "localforage";
+import { localforage } from "./localforage";
 
 interface Localforage {
-  clear(): Promise<void>;
+  clear(): Promise<boolean>;
 }
 
 interface LocalforageKeyReturnValue<T> extends Localforage {
   set(key: string, value: T): Promise<T | null>;
   get(key: string): Promise<T | null>;
-  remove(key: string | RegExp): Promise<void>;
+  get(key: RegExp): Promise<T[] | null>;
+  remove(key: string | RegExp): Promise<boolean>;
 }
 
 interface LocalforageReturnValue<T> extends Localforage {
   data: T | null;
   set(value: T): Promise<T | null>;
   get(): Promise<T | null>;
-  remove(key?: string | RegExp): Promise<void>;
+  remove(key?: string | RegExp): Promise<boolean>;
 }
 
-export function useLocalforage<V>(): LocalforageKeyReturnValue<V>;
-export function useLocalforage<V>(key: string): LocalforageReturnValue<V>;
+export function useLocalforage<V = never>(): LocalforageKeyReturnValue<V>;
+export function useLocalforage<V = never>(
+  key: string
+): LocalforageReturnValue<V>;
 
-export function useLocalforage<V>(
+export function useLocalforage<V = never>(
   key?: string
 ): LocalforageKeyReturnValue<V> | LocalforageReturnValue<V> {
   const [data, setData] = useState<V | null>(null);
 
   const set = useCallback(
     async (k: string | V, v: V) => {
-      try {
-        if (key) {
-          const value = await localforage.setItem(key, k as V);
-          setData(value);
-          return value;
-        } else {
-          const value = await localforage.setItem(k as string, v);
-          setData(value);
-          return value;
-        }
-      } catch (error) {
-        setData(null);
-        return null;
+      if (key) {
+        const value = await localforage.set<V>(key, k as V);
+        setData(value);
+        return value;
+      } else {
+        const value = await localforage.set<V>(k as string, v);
+        setData(value);
+        return value;
       }
     },
     [key]
   );
 
-  const get = useCallback(
-    async (k: string) => {
-      try {
-        const value = await localforage.getItem<V | null>(key || k);
-        setData(value);
-        return value;
-      } catch (error) {
-        setData(null);
-        return null;
-      }
-    },
-    [key]
-  );
+  const getKey = useCallback(async () => {
+    if (key) {
+      const value = await localforage.get<V>(key);
+      setData(value);
+      return value;
+    }
+    return null;
+  }, [key]);
+
+  const get = useCallback(async (k: string | RegExp) => {
+    if (typeof k === "string") {
+      const value = await localforage.get<V>(k);
+      return value;
+    } else {
+      const values = await localforage.get<V>(k);
+      return values;
+    }
+  }, []);
 
   const remove = useCallback(
     async (k?: string | RegExp) => {
-      try {
-        if (!k && key) {
-          await localforage.removeItem(key);
-          setData(null);
-        } else if (k) {
-          if (typeof k === "string") {
-            await localforage.removeItem(k);
-          } else {
-            const keys = await localforage.keys();
-            for (let i = 0; i < keys.length; i++) {
-              const key = keys[i];
-              if (k.test(key)) {
-                await localforage.removeItem(key);
-              }
-            }
-          }
-        }
-      } catch (error) {}
+      if (!k && key) {
+        const result = await localforage.remove(key);
+        result && setData(null);
+        return result;
+      } else if (k) {
+        const result = await localforage.remove(k);
+        return result;
+      } else {
+        return false;
+      }
     },
     [key]
   );
 
   const clear = useCallback(async () => {
-    try {
-      await localforage.clear();
-      setData(null);
-    } catch (error) {}
+    return await localforage.clear();
   }, []);
 
   useEffect(() => {
     if (!key) return;
-    get(key).then((res) => {
+    getKey().then((res) => {
       setData(res);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,7 +96,7 @@ export function useLocalforage<V>(
     ? {
         data,
         set,
-        get,
+        get: getKey,
         remove,
         clear,
       }
