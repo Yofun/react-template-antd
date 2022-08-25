@@ -6,6 +6,7 @@ import Lesson001 from "../pages/lesson001";
 import Lesson002 from "../pages/lesson002";
 import Lesson003 from "../pages/lesson003";
 import Lesson004 from "../pages/lesson004";
+import Lesson005 from "../pages/lesson005";
 
 export interface RouteProps extends PathRouteProps {
   title: string;
@@ -36,6 +37,11 @@ const routes: RouteProps[] = [
     path: "/lesson004",
     element: <Lesson004 />,
     title: "lesson004: localforage",
+  },
+  {
+    path: "/lesson005",
+    element: <Lesson005 />,
+    title: "lesson005: throttlePool",
   },
 ];
 
