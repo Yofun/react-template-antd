@@ -1,2 +1,2 @@
-export * from "./localforage";
-export * from "./use-localforage";
+export * from './localforage';
+export * from './use-localforage';

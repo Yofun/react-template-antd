@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { localforage } from "./localforage";
+import { useState, useCallback, useEffect } from 'react';
+import { localforage } from './localforage';
 
 interface Localforage {
   clear(): Promise<boolean>;
@@ -33,7 +33,7 @@ export function useLocalforage<T = never>(key?: string) {
       setData(v);
       return v;
     },
-    [key]
+    [key],
   );
 
   const setKey = useCallback(async (key: string, value: T) => {
@@ -53,7 +53,7 @@ export function useLocalforage<T = never>(key?: string) {
   function getKey(key: RegExp): Promise<T[] | null>;
   async function getKey(key: string | RegExp) {
     if (!key) return null;
-    if (typeof key === "string") {
+    if (typeof key === 'string') {
       return await localforage.get<T>(key);
     } else {
       return await localforage.get<T>(key);
@@ -73,7 +73,7 @@ export function useLocalforage<T = never>(key?: string) {
         return false;
       }
     },
-    [key]
+    [key],
   );
 
   const clear = useCallback(async () => {
@@ -92,9 +92,7 @@ export function useLocalforage<T = never>(key?: string) {
       setData(res);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [key]);
 
-  return !!key
-    ? { data, set, get, remove, clear, has }
-    : { set: setKey, get: getKey, remove, clear, has };
+  return !!key ? { data, set, get, remove, clear, has } : { set: setKey, get: getKey, remove, clear, has };
 }

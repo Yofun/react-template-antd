@@ -1,5 +1,3 @@
-import throttle from "lodash/throttle";
-
 export function createThrottlePool() {
   const cache: { [name: string]: () => void } = {};
   return function (hash: string, handler: () => void) {

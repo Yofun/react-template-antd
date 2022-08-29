@@ -12,6 +12,8 @@ const View = () => {
     data: userDraft,
     set: setUserDraft,
     remove: removeUserDraft,
+    clear,
+    has,
   } = useLocalforage<User>("username");
 
   const [user, setUser] = useState<User>(userDraft || {});
@@ -47,6 +49,8 @@ const View = () => {
       />
       <br />
       <button onClick={() => removeUserDraft()}>delete</button>
+      <button onClick={() => clear()}>clear</button>
+      <button onClick={() => has("key")}>has</button>
     </div>
   );
 };
