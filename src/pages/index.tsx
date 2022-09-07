@@ -1,11 +1,11 @@
-import { useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
 
-import { default as list } from "../router/routes";
+import { default as list } from '../router/routes';
 
 const Index = () => {
   const routes = useMemo(() => {
-    return list.filter((v) => v.path !== "/");
+    return list.filter((v) => v.path !== '/');
   }, []);
 
   return (
@@ -14,7 +14,7 @@ const Index = () => {
       <ul>
         {routes.map((v) => (
           <li key={v.path}>
-            <NavLink to={v.path}>{v.title}</NavLink>
+            <NavLink to={v.path}>{v.meta.title}</NavLink>
           </li>
         ))}
       </ul>
