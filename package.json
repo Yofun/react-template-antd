@@ -5,10 +5,11 @@
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "prepare": "husky install",
-    "start": "craco start --config scripts/dev.config.js",
-    "build": "craco build --config scripts/prod.config.js",
-    "test": "craco test --config scripts/dev.config.js",
-    "eject": "craco eject --config scripts/dev.config.js"
+    "start": "craco start ",
+    "build": "craco build",
+    "test": "jest",
+    "test:ci": "jest --ci",
+    "eject": "craco eject "
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
@@ -71,5 +72,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "cracoConfig": "./scripts/craco.config.js"
 }
