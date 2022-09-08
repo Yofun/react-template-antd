@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '@/store';
 import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
-import LazyComponent from './LazyCompoent';
+import Lazy from './Lazy';
 
 import routes from './routes';
 
@@ -13,7 +13,7 @@ const AppRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/login" element={<LazyComponent render={React.lazy(() => import('@/pages/login'))} />} />
+        <Route path="/login" element={<Lazy render={React.lazy(() => import('@/pages/login'))} />} />
         {routes.map((v) => {
           return <Route key={v.path} path={v.path} element={!!token ? v.element : <Navigate to={'/login'} />} />;
         })}
