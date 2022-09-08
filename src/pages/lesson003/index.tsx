@@ -1,25 +1,20 @@
 import { FC, useRef } from "react";
-import axios, { Canceler } from "axios";
+import axios, { CancelTokenSource } from "axios";
 import http from "./http";
-
-const CancelToken = axios.CancelToken;
 
 interface Props {}
 
 const AxiosTest: FC<Props> = () => {
-  const cancelTokenRef = useRef<Canceler>();
+  const cancelTokenRef = useRef<CancelTokenSource>();
 
   const handleClick = async () => {
     try {
-      if (cancelTokenRef.current) {
-        cancelTokenRef.current();
-      }
+      cancelTokenRef.current?.cancel("CancelPrevRequestKey");
+      cancelTokenRef.current = axios.CancelToken.source();
       await Promise.all([
         http.get("https://www.baidu.com", {
           ignoreError: true,
-          cancelToken: new CancelToken((c) => {
-            cancelTokenRef.current = c;
-          }),
+          cancelToken: cancelTokenRef.current.token,
         }),
         // http.get("https://www.github.com"),
       ]);

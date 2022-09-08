@@ -15,7 +15,7 @@ http.interceptors.response.use(
   (res) => res,
   (e: AxiosError) => {
     let error: Error = e;
-    console.log("interceptors error", e);
+    console.log("interceptors error", e, axios.isAxiosError(e));
 
     throw error;
   }
