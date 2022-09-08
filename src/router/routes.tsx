@@ -1,68 +1,43 @@
+import React from 'react';
 import { PathRouteProps } from 'react-router-dom';
 
-// routes
-import Index from '../pages';
-import Lesson001 from '../pages/lesson001';
-import Lesson002 from '../pages/lesson002';
-import Lesson003 from '../pages/lesson003';
-import Lesson004 from '../pages/lesson004';
-import Lesson005 from '../pages/lesson005';
-import Lesson006 from '../pages/lesson006';
+import LazyComponent from './LazyCompoent';
 
-export interface RouteProps extends PathRouteProps {
+export interface RouteProps extends Omit<PathRouteProps, 'children'> {
   meta: {
     title: string;
   };
+  children?: RouteProps[];
 }
 
+// public routes
 const routes: RouteProps[] = [
   {
     path: '/',
-    element: <Index />,
+    element: <LazyComponent render={React.lazy(() => import('@/pages/index'))} />,
     meta: {
-      title: 'index'
+      title: '首页'
     }
   },
   {
-    path: '/lesson001',
-    element: <Lesson001 />,
+    path: '/admin',
+    element: <LazyComponent render={React.lazy(() => import('@/pages/admin'))} />,
     meta: {
-      title: 'lesson001: transfer demo'
+      title: '管理员'
     }
   },
   {
-    path: '/lesson002',
-    element: <Lesson002 />,
+    path: '/backend',
+    element: <LazyComponent render={React.lazy(() => import('@/pages/backend'))} />,
     meta: {
-      title: 'lesson002: Promise limit'
+      title: '后台'
     }
   },
   {
-    path: '/lesson003',
-    element: <Lesson003 />,
+    path: '/404',
+    element: <LazyComponent render={React.lazy(() => import('@/pages/404'))} />,
     meta: {
-      title: 'lesson003: axios test'
-    }
-  },
-  {
-    path: '/lesson004',
-    element: <Lesson004 />,
-    meta: {
-      title: 'lesson004: localforage'
-    }
-  },
-  {
-    path: '/lesson005',
-    element: <Lesson005 />,
-    meta: {
-      title: 'lesson005: throttlePool'
-    }
-  },
-  {
-    path: '/lesson006',
-    element: <Lesson006 />,
-    meta: {
-      title: 'lesson006: axios useRequest'
+      title: '404错误'
     }
   }
 ];

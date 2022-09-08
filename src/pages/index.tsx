@@ -1,23 +1,18 @@
-import { useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { default as list } from '../router/routes';
+import { routes } from '@/router';
 
 const Index = () => {
-  const routes = useMemo(() => {
-    return list.filter((v) => v.path !== '/');
-  }, []);
-
   return (
     <>
-      <h3>I am a home page</h3>
-      <ul>
-        {routes.map((v) => (
-          <li key={v.path}>
-            <NavLink to={v.path}>{v.meta.title}</NavLink>
-          </li>
+      <h3>我是首页</h3>
+      {routes
+        .filter((v) => v.path !== '/')
+        .map((v) => (
+          <Link key={v.path} to={v.path}>
+            {v.meta.title}
+          </Link>
         ))}
-      </ul>
     </>
   );
 };

@@ -3,6 +3,7 @@ const path = require('path');
 // plugin
 const WebpackBar = require('webpackbar');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const CracoLessPlugin = require('craco-less');
 
 module.exports = {
   webpack: {
@@ -16,5 +17,18 @@ module.exports = {
       config.resolve.plugins = config.resolve.plugins.filter((plugin) => !(plugin instanceof ModuleScopePlugin));
       return config;
     }
-  }
+  },
+  plugins: [
+    {
+      plugin: CracoLessPlugin,
+      options: {
+        lessLoaderOptions: {
+          lessOptions: {
+            modifyVars: {},
+            javascriptEnabled: true
+          }
+        }
+      }
+    }
+  ]
 };
