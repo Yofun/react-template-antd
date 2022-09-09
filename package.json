@@ -74,5 +74,5 @@
       "last 1 safari version"
     ]
   },
-  "cracoConfig": "./scripts/craco.config.js"
+  "cracoConfig": "./craco/craco.config.js"
 }
