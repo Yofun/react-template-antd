@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '@/store';
 import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
-import Lazy from './Lazy';
 
 import routes from './routes';
 
@@ -13,9 +12,9 @@ const AppRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/login" element={<Lazy render={React.lazy(() => import('@/pages/login'))} />} />
+        <Route index element={<Navigate to={token ? '/' : '/login'} replace />} />
         {routes.map((v) => {
-          return <Route key={v.path} path={v.path} element={!!token ? v.element : <Navigate to={'/login'} />} />;
+          return <Route key={v.path} path={v.path} element={v.element} />;
         })}
         <Route path="*" element={<Navigate to={'/404'} />} />
       </Switch>

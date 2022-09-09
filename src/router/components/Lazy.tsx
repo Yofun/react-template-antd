@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import Loading from './Loading';
 
 interface Props {
   render: ReturnType<typeof React.lazy>;
@@ -6,7 +7,7 @@ interface Props {
 
 export default function Lazy({ render: Content }: Props) {
   return (
-    <Suspense fallback={<h2>loading.......</h2>}>
+    <Suspense fallback={<Loading></Loading>}>
       <Content />
     </Suspense>
   );
