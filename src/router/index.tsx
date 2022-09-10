@@ -1,22 +1,17 @@
 import React from 'react';
-import { useAppSelector } from '@/store';
-import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes as Switch } from 'react-router-dom';
 
 import routes from './routes';
+import { useAppRouterHook } from './hooks';
 
 export { routes };
 
 const AppRouter = () => {
-  const { token } = useAppSelector((state) => state.app);
-
+  const { renderRoutes } = useAppRouterHook();
   return (
     <Router>
       <Switch>
-        <Route index element={<Navigate to={token ? '/' : '/login'} replace />} />
-        {routes.map((v) => {
-          return <Route key={v.path} path={v.path} element={v.element} />;
-        })}
-        <Route path="*" element={<Navigate to={'/404'} />} />
+        <React.Fragment>{renderRoutes(routes)}</React.Fragment>
       </Switch>
     </Router>
   );

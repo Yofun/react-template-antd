@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { PathRouteProps } from 'react-router-dom';
+import { PathRouteProps, Navigate } from 'react-router-dom';
 
 import Lazy from './components/Lazy';
 
@@ -7,6 +7,7 @@ export interface RouteProps extends Omit<PathRouteProps, 'children'> {
   meta: {
     title: string;
     auth?: string[];
+    hidden?: true;
   };
   children?: RouteProps[];
 }
@@ -46,6 +47,14 @@ const routes: RouteProps[] = [
     element: <Lazy render={lazy(() => import('@/pages/404'))} />,
     meta: {
       title: '404错误'
+    }
+  },
+  {
+    path: '*',
+    element: <Navigate to={'/404'} replace />,
+    meta: {
+      title: '*',
+      hidden: true
     }
   }
 ];
